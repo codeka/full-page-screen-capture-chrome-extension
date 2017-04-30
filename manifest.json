@@ -1,10 +1,10 @@
 {
-  "name": "Full Page Screen Capture",
-  "version": "1.0.1",
-  "manifest_version": 2,
-  "description": "Screen capture your current page in entirety and reliably!",
+  "name": "Screen Capture",
+  "version": "2.0.0",
+  "manifest_version": 3,
+  "description": "Screen capture parts of your page, or the whole page in it's entirety, reliably!",
   "browser_action": {
-    "default_icon": "icon-999.png",
+    "default_icon": "icon.png",
     "default_popup": "popup.html"
   },
   "commands": {
@@ -16,8 +16,8 @@
   },
   "permissions": [ "activeTab" ],
   "icons": {
-    "16": "icon16-999.png",
-    "48": "icon48-999.png",
-    "128": "icon128-999.png"
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
   }
 }
