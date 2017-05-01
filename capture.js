@@ -1,13 +1,3 @@
-// Copyright (c) 2012,2013 Peter Coles - http://mrcoles.com/ - All rights reserved.
-// Use of this source code is governed by the MIT License found in LICENSE
-
-
-//
-// State fields
-//
-
-var currentTab, // result of chrome.tabs.query of current active tab
-    resultWindowId; // window id for putting resulting images
 
 
 //
@@ -18,6 +8,7 @@ function $(id) { return document.getElementById(id); }
 function show(id) { $(id).style.display = 'block'; }
 function hide(id) { $(id).style.display = 'none'; }
 
+var resultWindowId = null;
 
 function getFilename(contentURL) {
     var name = contentURL.split('?')[0].split('#')[0];
@@ -36,22 +27,7 @@ function getFilename(contentURL) {
 }
 
 
-//
-// Capture Handlers
-//
-
-
-function displayCaptures(filenames) {
-    if (!filenames || !filenames.length) {
-        show('uh-oh');
-        return;
-    }
-
-    _displayCapture(filenames);
-}
-
-
-function _displayCapture(filenames, index) {
+function displayCapture(filenames, currentTab, index) {
     index = index || 0;
 
     var filename = filenames[index];
@@ -85,38 +61,3 @@ function _displayCapture(filenames, index) {
     }
 }
 
-
-function errorHandler(reason) {
-    show('uh-oh'); // TODO - extra uh-oh info?
-}
-
-
-function progress(complete) {
-    if (complete === 0) {
-        // Page capture has just been initiated.
-        show('loading');
-    }
-    else {
-        $('bar').style.width = parseInt(complete * 100, 10) + '%';
-    }
-}
-
-
-function splitnotifier() {
-    show('split-image');
-}
-
-
-//
-// start doing stuff immediately! - including error cases
-//
-
-chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-    var tab = tabs[0];
-    currentTab = tab; // used in later calls to get tab info
-
-    var filename = getFilename(tab.url);
-
-    CaptureAPI.captureToFiles(tab, filename, displayCaptures,
-                              errorHandler, progress, splitnotifier);
-});
