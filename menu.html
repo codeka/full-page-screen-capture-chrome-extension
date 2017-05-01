@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <meta charset=utf-8>
+      <title>Screen catpure</title>
+      <!-- there are rendering bugs when styles aren't inline... -->
+      <style>
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 150pt;
+}
+a {
+  display: block;
+  padding: 10pt;
+  text-decoration: none;
+  color: #000;
+  cursor: pointer;
+}
+a:hover {
+  background: #ccc;
+}
+a img {
+  padding-top: 2px;
+}
+      </style>
+  </head>
+  <body>
+      <h2>Capture</h2>
+      <ul>
+        <li><a href="full-capture.html"><img src="full-capture.png" width="16" height="16" /> Complete page</a>
+        <li><a id="visible-capture"><img src="visible-capture.png" width="16" height="16" /> Visible area</a>
+        <li><a id="area-capture"><img src="area-capture.png" width="16" height="16" /> Selected area</a>
+      </ul>
+      <!-- JavaScript and HTML must be in separate files for security. -->
+      <script src="api.js"></script>
+      <script src="capture.js"></script>
+      <script src="menu.js"></script>
+  </body>
+</html>

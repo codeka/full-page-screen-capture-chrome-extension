@@ -161,28 +161,31 @@ window.CaptureAPI = (function() {
         });
     }
 
+    
+    function getBlob(dataURI) {
+        // convert base64 to raw binary data held in a string
+        // doesn't handle URLEncoded DataURIs
+        var byteString = atob(dataURI.split(',')[1]);
+
+        // separate out the mime component
+        var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+
+        // write the bytes of the string to an ArrayBuffer
+        var ab = new ArrayBuffer(byteString.length);
+        var ia = new Uint8Array(ab);
+        for (var i = 0; i < byteString.length; i++) {
+            ia[i] = byteString.charCodeAt(i);
+        }
+
+        // create a blob for writing to a file
+        return new Blob([ab], {type: mimeString});
+    }
+
 
     function getBlobs(screenshots) {
         return screenshots.map(function(screenshot) {
             var dataURI = screenshot.canvas.toDataURL();
-
-            // convert base64 to raw binary data held in a string
-            // doesn't handle URLEncoded DataURIs
-            var byteString = atob(dataURI.split(',')[1]);
-
-            // separate out the mime component
-            var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
-
-            // write the bytes of the string to an ArrayBuffer
-            var ab = new ArrayBuffer(byteString.length);
-            var ia = new Uint8Array(ab);
-            for (var i = 0; i < byteString.length; i++) {
-                ia[i] = byteString.charCodeAt(i);
-            }
-
-            // create a blob for writing to a file
-            var blob = new Blob([ab], {type: mimeString});
-            return blob;
+            return getBlob(dataURI);
         });
     }
 
@@ -226,7 +229,7 @@ window.CaptureAPI = (function() {
     }
 
 
-    function captureToBlobs(tab, callback, errback, progress, splitnotifier) {
+    function fullCaptureToBlobs(tab, callback, errback, progress, splitnotifier) {
         var loaded = false,
             screenshots = [],
             timeout = 3000,
@@ -283,8 +286,24 @@ window.CaptureAPI = (function() {
     }
 
 
-    function captureToFiles(tab, filename, callback, errback, progress, splitnotifier) {
-        captureToBlobs(tab, function(blobs) {
+    // Capturing just the visible region is much simpler...
+    function visibleCaptureToBlob(tab, callback, errback) {
+        if (!isValidUrl(tab.url)) {
+            errback('invalid url'); // TODO errors
+        }
+
+        chrome.tabs.captureVisibleTab(
+            null, {format: 'png', quality: 100}, function(dataURI) {
+                if (dataURI) {
+                    var blob = getBlob(dataURI);
+                    callback(blob);
+                }
+            });
+    }
+
+
+    function fullCaptureToFiles(tab, filename, callback, errback, progress, splitnotifier) {
+        fullCaptureToBlobs(tab, function(blobs) {
             var i = 0,
                 len = blobs.length,
                 filenames = [];
@@ -300,9 +319,20 @@ window.CaptureAPI = (function() {
     }
 
 
+    function visibleCaptureToFile(tab, filename, callback, errback) {
+        visibleCaptureToBlob(tab, function(blob) {
+            saveBlob(blob, filename, 0, function(filename) {
+                callback(filename);
+            });
+        }, errback);
+    }
+
+
     return {
-        captureToBlobs: captureToBlobs,
-        captureToFiles: captureToFiles
+        fullCaptureToBlobs: fullCaptureToBlobs,
+        fullCaptureToFiles: fullCaptureToFiles,
+        visibleCaptureToBlob: visibleCaptureToBlob,
+        visibleCaptureToFile: visibleCaptureToFile,
     };
 
 })();
