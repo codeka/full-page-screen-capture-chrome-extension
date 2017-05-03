@@ -8,8 +8,8 @@ function visibleCapture() {
     chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
         var tab = tabs[0];
         var filename = getFilename(tab.url);
-        CaptureAPI.visibleCaptureToFile(tab, filename, function(filename) {
-            displayCapture([filename], tab);
+        CaptureAPI.visibleCaptureToBlob(tab, function(blob) {
+            uploadImage(blob, filename);
         }, _onError);
     });
 }

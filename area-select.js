@@ -68,7 +68,6 @@ document.addEventListener("mouseup", function() {
     canvas.height = rect.height;
     var ctx = canvas.getContext("2d");
     ctx.drawImage($("image"), rect.x, rect.y, rect.width, rect.height, 0, 0, rect.width, rect.height);
-    $("image").src = canvas.toDataURL();
-
+    uploadImage(CaptureAPI.getBlob(canvas.toDataURL()), _getQueryVariable("filename"));
     finished = true;
 });

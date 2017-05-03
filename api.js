@@ -333,6 +333,7 @@ window.CaptureAPI = (function() {
         fullCaptureToFiles: fullCaptureToFiles,
         visibleCaptureToBlob: visibleCaptureToBlob,
         visibleCaptureToFile: visibleCaptureToFile,
+        getBlob: getBlob
     };
 
 })();
