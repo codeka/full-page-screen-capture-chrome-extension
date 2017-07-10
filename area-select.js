@@ -13,6 +13,12 @@ function _getQueryVariable(variable) {
 }
 
 $("image").src = _getQueryVariable("filename");
+if (window.devicePixelRatio > 1) {
+    $("image").addEventListener("load", function(event) {
+        var img = $("image");
+        img.style.width = (img.width / window.devicePixelRatio) + "px";
+    });
+}
 
 var _top = $("top");
 var _bottom = $("bottom");
@@ -62,6 +68,11 @@ document.addEventListener("mouseup", function() {
     _left.style.display = "none";
     _right.style.display = "none";
     _bottom.style.display = "none";
+
+    rect.x *= window.devicePixelRatio;
+    rect.y *= window.devicePixelRatio;
+    rect.width *= window.devicePixelRatio;
+    rect.height *= window.devicePixelRatio;
 
     var canvas = document.createElement("canvas");
     canvas.width = rect.width;
