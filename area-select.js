@@ -78,7 +78,18 @@ document.addEventListener("mouseup", function() {
     canvas.width = rect.width;
     canvas.height = rect.height;
     var ctx = canvas.getContext("2d");
-    ctx.drawImage($("image"), rect.x, rect.y, rect.width, rect.height, 0, 0, rect.width, rect.height);
-    uploadImage(CaptureAPI.getBlob(canvas.toDataURL()), _getQueryVariable("filename"));
+    ctx.drawImage(
+        $("image"),
+        rect.x, rect.y, rect.width, rect.height,
+        0, 0, rect.width, rect.height);
+    $("progress").style.display = "block";
+    uploadImage(
+        CaptureAPI.getBlob(canvas.toDataURL()),
+        _getQueryVariable("filename"),
+        function(percent) {
+            document.querySelector(".meter > span").style.width = percent + "%";
+        }, function(url) {
+            chrome.tabs.update(null, {url: url});
+        });
     finished = true;
 });
