@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-git archive -o full-page-screen-capture.zip HEAD
+git archive -o snipit.zip HEAD
