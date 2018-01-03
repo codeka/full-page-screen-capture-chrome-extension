@@ -4,17 +4,6 @@ function _onError(reason) {
     show('uh-oh'); // TODO - extra uh-oh info?
 }
 
-function visibleCapture() {
-    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-        var tab = tabs[0];
-        var filename = getFilename(tab.url);
-        CaptureAPI.visibleCaptureToBlob(tab, function(blob) {
-            uploadImage(blob, filename);
-        }, _onError);
-    });
-}
-
-
 function areaCapture() {
     chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
         var tab = tabs[0];
@@ -31,5 +20,4 @@ function areaCapture() {
     });
 }
 
-$("visible-capture").addEventListener("click", visibleCapture);
 $("area-capture").addEventListener("click", areaCapture);

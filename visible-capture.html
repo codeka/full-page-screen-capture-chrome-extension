@@ -1,51 +1,17 @@
 <!DOCTYPE html>
 <html>
   <head>
-      <meta charset=utf-8>
-      <title>Area select</title>
-      <style>
-      html, body {
-        margin: 0;
-        padding: 0;
-        overflow: hidden;
+    <meta charset=utf-8>
+    <title>Full page screen catpure</title>
+    <style>
+      body {
+        font: normal 12px/16px helvetica,aria,sans-serif;
+        width: 150pt;
+        height: 120pt;
       }
-
-      * {
-        -webkit-user-drag: none;
-        user-select: none;
-      }
-
-      #top, #left, #right, #bottom {
-        position: absolute;
-        background: rgba(0, 0, 0, 0.75);
-      }
-
-      #top {
-        width: 100%;
-        height: 100%;
-      }
-      #bottom {
-        width: 100%;
-      }
-
-      #progress {
-        position: absolute;
-        top: 0; left: 0;
-        right: 0; bottom: 0;
-        background: rgba(0, 0, 0, 0.75);
-      }
-
-      #progress .popup {
-        position: absolute;
-        top: 40%;
-        left: 50%;
-        width: 200pt;
-        margin-left: -100pt;
-        height: 80pt;
-        background: #fff;
-        padding: 10pt;
-        box-shadow: 0px 0px 10px 2px rgba(0,0,0,1);
-        border-radius: 5px;
+      p {
+        margin: 40pt 0 20pt 0;
+        text-align: center;
       }
 
       .meter { 
@@ -105,24 +71,14 @@
       </style>
   </head>
   <body>
-      <div id="wrap">
-          <div id="top"></div>
-          <div id="left"></div>
-          <div id="right"></div>
-          <div id="bottom"></div>
-          <img id="image" />
-      </div>
-      <div id="progress" style="display: none;">
-        <div class="popup">
-          <p>Uploading...</p>
-          <div class="meter">
-            <span style="width: 0;"></span>
-          </div>
-        </div>
-      </div>
-      <script src="api.js"></script>
-      <script src="capture.js"></script>
-      <script src="upload-codeka.js"></script>
-      <script src="area-select.js"></script>
+    <p>Uploading...</p>
+    <div class="meter">
+      <span style="width: 0;"></span>
+    </div>
+
+    <script src="api.js"></script>
+    <script src="capture.js"></script>
+    <script src="upload-codeka.js"></script>
+    <script src="visible-capture.js"></script>
   </body>
 </html>
