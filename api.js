@@ -5,11 +5,9 @@ window.CaptureAPI = (function() {
         MAX_SECONDARY_DIMENSION = 4000 * 2,
         MAX_AREA = MAX_PRIMARY_DIMENSION * MAX_SECONDARY_DIMENSION;
 
-
     //
     // URL Matching test - to verify we can talk to this URL
     //
-
     var matches = ['http://*/*', 'https://*/*', 'ftp://*/*', 'file://*/*'],
         noMatches = [/^https?:\/\/chrome.google.com\/.*$/];
 
@@ -32,7 +30,6 @@ window.CaptureAPI = (function() {
         return false;
     }
 
-
     function initiateCapture(tab, callback) {
         chrome.tabs.sendMessage(tab.id, {msg: 'scrollPage'}, function() {
             // We're done taking snapshots of all parts of the window. Display
@@ -40,7 +37,6 @@ window.CaptureAPI = (function() {
             callback();
         });
     }
-
 
     function capture(data, screenshots, sendResponse, splitnotifier) {
         chrome.tabs.captureVisibleTab(
@@ -96,7 +92,6 @@ window.CaptureAPI = (function() {
             });
     }
 
-
     function _initScreenshots(totalWidth, totalHeight) {
         // Create and return an array of screenshot objects based
         // on the `totalWidth` and `totalHeight` of the final image.
@@ -146,7 +141,6 @@ window.CaptureAPI = (function() {
         return result;
     }
 
-
     function _filterScreenshots(imgLeft, imgTop, imgWidth, imgHeight, screenshots) {
         // Filter down the screenshots to ones that match the location
         // of the given image.
@@ -161,7 +155,6 @@ window.CaptureAPI = (function() {
         });
     }
 
-    
     function getBlob(dataURI) {
         // convert base64 to raw binary data held in a string
         // doesn't handle URLEncoded DataURIs
@@ -181,14 +174,12 @@ window.CaptureAPI = (function() {
         return new Blob([ab], {type: mimeString});
     }
 
-
     function getBlobs(screenshots) {
         return screenshots.map(function(screenshot) {
             var dataURI = screenshot.canvas.toDataURL();
             return getBlob(dataURI);
         });
     }
-
 
     function saveBlob(blob, filename, index, callback, errback) {
         filename = _addFilenameSuffix(filename, index);
@@ -218,7 +209,6 @@ window.CaptureAPI = (function() {
         }, errback);
     }
 
-
     function _addFilenameSuffix(filename, index) {
         if (!index) {
             return filename;
@@ -227,7 +217,6 @@ window.CaptureAPI = (function() {
         var ext = sp.pop();
         return sp.join('.') + '-' + (index + 1) + '.' + ext;
     }
-
 
     function fullCaptureToBlobs(tab, callback, errback, progress, splitnotifier) {
         var loaded = false,
@@ -285,22 +274,16 @@ window.CaptureAPI = (function() {
         }, timeout);
     }
 
-
     // Capturing just the visible region is much simpler...
     function visibleCaptureToBlob(tab, callback, errback) {
-        if (!isValidUrl(tab.url)) {
-            errback('invalid url'); // TODO errors
-        }
-
         chrome.tabs.captureVisibleTab(
-            null, {format: 'png', quality: 100}, function(dataURI) {
+            null, {format: 'png'}, function(dataURI) {
                 if (dataURI) {
                     var blob = getBlob(dataURI);
                     callback(blob);
                 }
             });
     }
-
 
     function fullCaptureToFiles(tab, filename, callback, errback, progress, splitnotifier) {
         fullCaptureToBlobs(tab, function(blobs) {
@@ -318,7 +301,6 @@ window.CaptureAPI = (function() {
         }, errback, progress, splitnotifier);
     }
 
-
     function visibleCaptureToFile(tab, filename, callback, errback) {
         visibleCaptureToBlob(tab, function(blob) {
             saveBlob(blob, filename, 0, function(filename) {
@@ -327,7 +309,6 @@ window.CaptureAPI = (function() {
         }, errback);
     }
 
-
     return {
         fullCaptureToBlobs: fullCaptureToBlobs,
         fullCaptureToFiles: fullCaptureToFiles,
@@ -335,5 +316,4 @@ window.CaptureAPI = (function() {
         visibleCaptureToFile: visibleCaptureToFile,
         getBlob: getBlob
     };
-
 })();
