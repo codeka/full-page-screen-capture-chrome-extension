@@ -1,6 +1,6 @@
 
 
-var BASE_URL = "http://www.codeka.com.au/";
+var BASE_URL = "https://www.codeka.com/";
 
 var loaderHtml = "<div style=\"position: absolute; top: 33%; text-align: center; line-height: 40px;\">" +
     "Uploading..." +
